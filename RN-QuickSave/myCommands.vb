@@ -16,60 +16,56 @@ Namespace RN_QuickSave
     ' of a given document. In other words, non static data in this class
     ' is implicitly per-document!
     Public Class MyCommands
+        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim acCurDb As Database = acDoc.Database
+        Dim acEd As Editor = acDoc.Editor
+        Dim AcApp As Autodesk.AutoCAD.ApplicationServices.Application
+        Dim oColXrefIsolate As ObjectIdCollection
 
-        ' The CommandMethod attribute can be applied to any public  member 
-        ' function of any public class.
-        ' The function should take no arguments and return nothing.
-        ' If the method is an instance member then the enclosing class is 
-        ' instantiated for each document. If the member is a static member then
-        ' the enclosing class is NOT instantiated.
-        '
-        ' NOTE: CommandMethod has overloads where you can provide helpid and
-        ' context menu.
-
-        ' Modal Command with localized name
-        ' AutoCAD will search for a resource string with Id "MyCommandLocal" in the 
-        ' same namespace as this command class. 
-        ' If a resource string is not found, then the string "MyLocalCommand" is used 
-        ' as the localized command name.
-        ' To view/edit the resx file defining the resource strings for this command, 
-        ' * click the 'Show All Files' button in the Solution Explorer;
-        ' * expand the tree node for myCommands.vb;
-        ' * and double click on myCommands.resx
-        <CommandMethod("MyGroup", "MyCommand", "MyCommandLocal", CommandFlags.Modal)> _
-        Public Sub MyCommand() ' This method can have any name
-            ' Put your command code here
+        <CommandMethod("rnquicksavesetting", "rnquicksavesetting", "rnquicksavesetting", CommandFlags.Modal)>
+        Public Sub rnquicksavesetting() ' This method can have any name
+            ' open settings window
+            Dim frmSettings As New frmSettings
+            frmSettings.ShowDialog()
         End Sub
 
-        ' Modal Command with pickfirst selection
-        <CommandMethod("MyGroup", "MyPickFirst", "MyPickFirstLocal", CommandFlags.Modal + CommandFlags.UsePickSet)> _
-        Public Sub MyPickFirst() ' This method can have any name
-            Dim result As PromptSelectionResult = Application.DocumentManager.MdiActiveDocument.Editor.GetSelection()
-            If (result.Status = PromptStatus.OK) Then
-                ' There are selected entities
-                ' Put your command using pickfirst set code here
-            Else
-                ' There are no selected entities
-                ' Put your command code here
-            End If
-        End Sub
-
-        ' Application Session Command with localized name
-        <CommandMethod("MyGroup", "MySessionCmd", "MySessionCmdLocal", CommandFlags.Modal + CommandFlags.Session)> _
-        Public Sub MySessionCmd() ' This method can have any name
-            ' Put your command code here
-        End Sub
-
-        ' LispFunction is similar to CommandMethod but it creates a lisp 
-        ' callable function. Many return types are supported not just string
-        ' or integer.
-        <LispFunction("MyLispFunction", "MyLispFunctionLocal")> _
-        Public Function MyLispFunction(ByVal args As ResultBuffer) ' This method can have any name
+        <CommandMethod("rnquicksave", "rnquicksave", "rnquicksave", CommandFlags.Modal)>
+        Public Sub rnquicksave() ' This method can have any name
             ' Put your command code here
 
-            ' Return a value to the AutoCAD Lisp Interpreter
-            Return 1
-        End Function
+        End Sub
+
+        <CommandMethod("rnquicksaveload", "rnquicksaveload", "rnquicksaveload", CommandFlags.Modal)>
+        Public Sub rnquicksaveload() ' This method can have any name
+            ' Put your command code here
+            clsCommandMonitor.startCommandMonitor()
+            clsCommandMonitor.saveSettings("CommandMonitorActive", "true")
+        End Sub
+
+        <CommandMethod("rnquicksaveunload", "rnquicksaveunload", "rnquicksaveunload", CommandFlags.Modal)>
+        Public Sub rnquicksaveunload() ' This method can have any name
+            ' Put your command code here
+            clsCommandMonitor.endCommandMonitor()
+            clsCommandMonitor.saveSettings("CommandMonitorActive", "false")
+        End Sub
+        ''' <summary>
+        ''' 'Unload all loaded Xrefs
+        ''' </summary>
+        <CommandMethod("ip", "ip", "ip", CommandFlags.Modal)>
+        Public Sub rnisolateproject()
+            oColXrefIsolate = clsCommandMonitor.getXrefCollection()
+            acCurDb.UnloadXrefs(oColXrefIsolate)
+        End Sub
+        ''' <summary>
+        ''' 'reload previous unloaded xrefs
+        ''' </summary>
+        <CommandMethod("up", "up", "up", CommandFlags.Modal)>
+        Public Sub rnunisolateproject()
+            acCurDb.ReloadXrefs(oColXrefIsolate)
+        End Sub
+
+
+
 
     End Class
 
