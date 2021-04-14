@@ -16,6 +16,10 @@ Public Class frmSettings
     Private Shared m_DocData As clsMyDocData = New clsMyDocData
 
     Private Sub frmSettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        acDoc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        acCurDb = acDoc.Database
+        acEd = acDoc.Editor
+        'AcApp = Autodesk.AutoCAD.ApplicationServices.Application
         loadXrefs()
         loadSettings()
     End Sub
@@ -72,9 +76,13 @@ Public Class frmSettings
             If aLoadFilters(0) = "true" Then
                 'commandmonitor actief
                 cmdStart.BackColor = Color.DarkGreen
+                lblQSstatus.Text = "QuickSave INGESCHAKELD"
+                lblQSstatus.BackColor = Color.DarkGreen
             Else
                 'commandmonitor inactief
                 cmdStart.BackColor = DefaultBackColor
+                lblQSstatus.Text = "QuickSave UIGESCHAKELD"
+                lblQSstatus.BackColor = Color.Red
             End If
         Catch ex As Exception
             'geen filter gevonden

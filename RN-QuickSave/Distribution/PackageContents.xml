@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage 
+   SchemaVersion="1.0"
+   Name="RN-QuickSave"
+   AppVersion="1.0.0.0"
+   ProductCode="{D4FE5436-8F76-4FA7-AA8A-23A1FB27D59F}"
+   Author="R. Nijkamp"
+   Icon="./Contents/logo.ico"
+   Description="AutoCAD QuickSave"
+   UpgradeCode="{D4FE5436-8F76-4FA7-AA8A-23A1FB27D59F}"> <!-- Remain UpgradeCode -->
+  <CompanyDetails
+    Name="Roy Nijkamp"
+    Phone="+31611101043"
+    Url="http://www.roynijkamp.nl"
+    Email="roynijkamp@roynijkamp.nl" />
+
+  <Components> <!-- Alle AutoCAD producten -->
+    <RuntimeRequirements
+      Platform="AutoCAD|AutoCAD*"
+      OS="Win32|Win64"
+      SeriesMin="R19.1"
+      SeriesMax="R23.0" />
+
+    <ComponentEntry
+      AppName="RN-QuickSave"
+      ModuleName="./Contents/RN-QuickSave.dll"
+      AppDescription="RN-QuickSave"
+      LoadOnAppearance="True">
+    </ComponentEntry>
+	</Components>
+</ApplicationPackage>

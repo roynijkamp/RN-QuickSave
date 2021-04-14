@@ -29,42 +29,80 @@ Namespace RN_QuickSave
             frmSettings.ShowDialog()
         End Sub
 
-        <CommandMethod("rnquicksave", "rnquicksave", "rnquicksave", CommandFlags.Modal)>
-        Public Sub rnquicksave() ' This method can have any name
+        <CommandMethod("rnquicksavereload", "rnquicksavereload", "rnquicksavereload", CommandFlags.Modal)>
+        Public Sub rnquicksavereload() ' This method can have any name
             ' Put your command code here
-
+            clsCommandMonitor.reloadProject()
         End Sub
 
-        <CommandMethod("rnquicksaveload", "rnquicksaveload", "rnquicksaveload", CommandFlags.Modal)>
-        Public Sub rnquicksaveload() ' This method can have any name
+        <CommandMethod("rnquicksavestart", "rnquicksavestart", "rnquicksavestart", CommandFlags.Modal)>
+        Public Sub rnquicksavestart() ' This method can have any name
             ' Put your command code here
             clsCommandMonitor.startCommandMonitor()
-            clsCommandMonitor.saveSettings("CommandMonitorActive", "true")
+            'clsCommandMonitor.saveSettings("CommandMonitorActive", "true")
         End Sub
 
-        <CommandMethod("rnquicksaveunload", "rnquicksaveunload", "rnquicksaveunload", CommandFlags.Modal)>
-        Public Sub rnquicksaveunload() ' This method can have any name
+        <CommandMethod("rnquicksavestop", "rnquicksavestop", "rnquicksavestop", CommandFlags.Modal)>
+        Public Sub rnquicksavestop() ' This method can have any name
             ' Put your command code here
             clsCommandMonitor.endCommandMonitor()
-            clsCommandMonitor.saveSettings("CommandMonitorActive", "false")
-        End Sub
-        ''' <summary>
-        ''' 'Unload all loaded Xrefs
-        ''' </summary>
-        <CommandMethod("ip", "ip", "ip", CommandFlags.Modal)>
-        Public Sub rnisolateproject()
-            oColXrefIsolate = clsCommandMonitor.getXrefCollection()
-            acCurDb.UnloadXrefs(oColXrefIsolate)
-        End Sub
-        ''' <summary>
-        ''' 'reload previous unloaded xrefs
-        ''' </summary>
-        <CommandMethod("up", "up", "up", CommandFlags.Modal)>
-        Public Sub rnunisolateproject()
-            acCurDb.ReloadXrefs(oColXrefIsolate)
+            'clsCommandMonitor.saveSettings("CommandMonitorActive", "false")
         End Sub
 
+        <CommandMethod("klicaan", "ka", "klicaan", CommandFlags.Modal)>
+        Public Sub rnklicaan()
+            clsCommandMonitor.klicaan()
+        End Sub
 
+        <CommandMethod("klicuit", "ku", "klicuit", CommandFlags.Modal)>
+        Public Sub rnklicuit()
+            clsCommandMonitor.klicuit()
+        End Sub
+
+        <CommandMethod("xrefaan", "xa", "xrefaan", CommandFlags.Modal)>
+        Public Sub xrefaan()
+            Dim sXref = getUserInput("Welke xref moet aan? ")
+            If sXref = "" Then Exit Sub
+            clsCommandMonitor.LoudUnloadXref(True, sXref.ToString.ToUpper)
+
+        End Sub
+
+        <CommandMethod("xrefuit", "xu", "xrefuit", CommandFlags.Modal)>
+        Public Sub xrefuit()
+            Dim sXref = getUserInput("Welke xref moet uit? ")
+            If sXref = "" Then Exit Sub
+            clsCommandMonitor.LoudUnloadXref(False, sXref.ToString.ToUpper)
+
+        End Sub
+
+        Public Function getUserInput(sVraag As String)
+            Dim pStrOpts As PromptStringOptions = New PromptStringOptions(vbLf & sVraag)
+            pStrOpts.AllowSpaces = True
+            Dim pStrRes As PromptResult = acDoc.Editor.GetString(pStrOpts)
+            If pStrRes.Status = PromptStatus.OK Then
+                Return pStrRes.StringResult
+            Else
+                Return ""
+            End If
+        End Function
+
+        Public Function getUserKeyWord(listKeys As List(Of String))
+            Dim pKeyOpts As PromptKeywordOptions = New PromptKeywordOptions("")
+            pKeyOpts.Message = vbLf & "Maak een keuze "
+            'pKeyOpts.Keywords.Add("Line")
+            'pKeyOpts.Keywords.Add("Circle")
+            'pKeyOpts.Keywords.Add("Arc")
+            For Each sKey As String In listKeys
+                pKeyOpts.Keywords.Add(sKey)
+            Next
+            pKeyOpts.AllowNone = False
+            Dim pKeyRes As PromptResult = acDoc.Editor.GetKeywords(pKeyOpts)
+            If pKeyRes.Status = PromptStatus.OK Then
+                Return pKeyRes.StringResult
+            Else
+                Return ""
+            End If
+        End Function
 
 
     End Class

@@ -27,6 +27,7 @@ Partial Class frmSettings
         Me.flowXrefs = New System.Windows.Forms.FlowLayoutPanel()
         Me.cmdStart = New System.Windows.Forms.Button()
         Me.cmdStop = New System.Windows.Forms.Button()
+        Me.lblQSstatus = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -73,6 +74,7 @@ Partial Class frmSettings
         Me.cmdStart.TabIndex = 3
         Me.cmdStart.Text = "Start Xref Monitor"
         Me.cmdStart.UseVisualStyleBackColor = True
+        Me.cmdStart.Visible = False
         '
         'cmdStop
         '
@@ -83,12 +85,23 @@ Partial Class frmSettings
         Me.cmdStop.TabIndex = 4
         Me.cmdStop.Text = "Stop Xref Monitor"
         Me.cmdStop.UseVisualStyleBackColor = True
+        Me.cmdStop.Visible = False
+        '
+        'lblQSstatus
+        '
+        Me.lblQSstatus.AutoSize = True
+        Me.lblQSstatus.Location = New System.Drawing.Point(12, 355)
+        Me.lblQSstatus.Name = "lblQSstatus"
+        Me.lblQSstatus.Size = New System.Drawing.Size(131, 13)
+        Me.lblQSstatus.TabIndex = 5
+        Me.lblQSstatus.Text = "QuickSave Uitgeschakeld"
         '
         'frmSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(496, 385)
+        Me.Controls.Add(Me.lblQSstatus)
         Me.Controls.Add(Me.cmdStop)
         Me.Controls.Add(Me.cmdStart)
         Me.Controls.Add(Me.flowXrefs)
@@ -109,4 +122,5 @@ Partial Class frmSettings
     Friend WithEvents flowXrefs As Windows.Forms.FlowLayoutPanel
     Friend WithEvents cmdStart As Windows.Forms.Button
     Friend WithEvents cmdStop As Windows.Forms.Button
+    Friend WithEvents lblQSstatus As Windows.Forms.Label
 End Class
